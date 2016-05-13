@@ -13,10 +13,11 @@
 
         <table class="w3-table w3-striped w3-bordered w3-border">
 
-            <tr ng-repeat="showpiece in showpieces">
+            <tr dir-paginate="showpiece in showpieces | itemsPerPage: 4" style="height:150px">
                 <td>
                     <img src="img/default.jpeg" ng-show="!haveImageUrl(showpiece)" class="w3-left img-rounded w3-margin-right" width="125" height="125">
-                    <img ng-src="data:image/jpeg;base64,{{ showpiece.imageUrl }}" ng-show="haveImageUrl(showpiece)" class="w3-left img-rounded w3-margin-right" width="125" height="125">
+                    <img ng-src="{{ showpiece.imageUrl }}" ng-show="haveImageUrl(showpiece)" class="w3-left img-rounded w3-margin-right" width="125" height="125"
+                            style="display: block; max-width:230px; max-height:95px; width: auto; height: auto;">
                 </td>
                 <td>
                     <span class="w3-xlarge">{{ showpiece.name }}</span><br/>
@@ -30,6 +31,12 @@
                 </td>
             </tr>
         </table>
+
+        <dir-pagination-controls
+                max-size="10">
+        </dir-pagination-controls>
+
+
     </div>
 
     <!--Редактирование -->
@@ -46,7 +53,7 @@
                     <img id="image" flow-img="$flow.files[0]"/>
                 </div>
                 <div class="thumbnail" ng-show="haveImageUrl(item) && !$flow.files.length">
-                    <img ng-src="data:image/jpeg;base64,{{ item.imageUrl }}"/>
+                    <img ng-src="{{ item.imageUrl }}"/>
                 </div>
 
                 <div>

@@ -78,9 +78,9 @@ app.controller('showpieceController', ['$scope', '$http', '$controller', functio
 
     $scope.submitItem = function (itemForPut) {
         var c = document.getElementById("image");
-        if (c != null){
+        if (c != null && c.src.length > 100){
             delete $scope.item.imageUrl;
-            $scope.item.image = c.currentSrc;
+            $scope.item.image = c.src;
         }
         itemForPut.user = null;
         var httpRequest = $http.put(serverUrl + '/showpieces/', itemForPut).success(function (data, status) {

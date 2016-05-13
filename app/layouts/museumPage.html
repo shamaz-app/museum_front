@@ -1,0 +1,24 @@
+<div class="w3-container" ng-init="init()">
+    <h1 class="w3-center">{{ museum.name }}</h1>
+    <hr>
+    <div class="w3-row">
+        <div class="w3-col s3 w3-center">
+
+            <img src="img/default.jpeg" ng-show="!haveImageUrl(museum)"
+                 class="w3-round" style="height:200px;width:200px" alt="Museum">
+            <img ng-src="{{ museum.imageUrl }}" ng-show="haveImageUrl(museum)"
+                 class="w3-round" style="height:200px;width:200px" alt="Museum">
+        </div>
+        <div class="w3-col s9 w3-center">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+
+                    <h2>Адрес:</h2>
+                </div>
+                <div class="form-group">
+                    <span style="white-space: normal">{{ museumAddressToString(museum) }}</span><br/>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

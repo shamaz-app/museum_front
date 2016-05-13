@@ -3,6 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Museum page</title>
+
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>
@@ -19,18 +20,23 @@
 
     <script src="js/aui-min.js"></script>
     <script src="js/app.js"></script>
+    <script src="js/dirPagination.js"></script>
 
     <!--controllers-->
     <script src="js/controller/showpieceController.js" charset="utf-8"></script>
+    <script src="js/controller/museumController.js" charset="utf-8"></script>
+    <script src="js/controller/museumPageController.js" charset="utf-8"></script>
 
     <!--services-->
+    <!--<script src="js/service/museumService.js"></script>-->
+
 </head>
 <body ng-app="museum">
 
 <nav class="w3-sidenav w3-white w3-card-2" style="width:15%">
     <br>
     <a href="#/welcome">На главную</i></a>
-    <a href="#">Музеи</a>
+    <a href="#/museum">Музеи</a>
     <a href="#/showpieces">Экспонаты</a>
 </nav>
 
