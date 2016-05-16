@@ -5,8 +5,11 @@
 
 'use strict';
 
-app.controller('museumPageController', ['$scope', '$http', '$routeParams', function ($scope, $http, $routeParams) {
+app.controller('museumPageController', ['$scope', '$http', '$routeParams', 'museumService', function ($scope, $http, $routeParams, museumService) {
 
+
+    $scope.addOrEditContactMode = false;
+    $scope.editAddressMode = false;
 
     $scope.init = function () {
         $scope.museumId = $routeParams.museumId;
@@ -37,31 +40,100 @@ app.controller('museumPageController', ['$scope', '$http', '$routeParams', funct
         return result;
     };
 
-    $scope.museumContactsToString = function () {
-        var result = '';
-        if ($scope.museum !== undefined && $scope.museum.contacts !== undefined) {
-            $scope.museum.contacts.forEach(function(contact, i, arr) {
-                result += contact.contactType.name + ' ' + contact.contact;
-                if (arr[i+1] !== undefined) {
-                    result += '; '
+    $scope.onActionEditAddress = function () {
+        if ($scope.museum !== undefined) {
+            museumService.getCountries().success(function (data, status) {
+                $scope.countries = data;
+            });
+            museumService.getCities().success(function (data, status) {
+                $scope.cities = data;
+            });
+            museumService.getStreets().success(function (data, status) {
+                $scope.streets = data;
+            });
+            $scope.addressEdit = {};
+            $scope.addressEdit.country = $scope.museum.street.city.country;
+            $scope.addressEdit.city = $scope.museum.street.city;
+            $scope.addressEdit.street = $scope.museum.street;
+            $scope.editAddressMode = true;
+        }
+    };
+
+    $scope.changeCountry = function () {
+        museumService.getCities($scope.addressEdit.country.id).success(function (data, status) {
+            $scope.cities = data;
+        });
+    };
+
+    $scope.changeCity = function () {
+        museumService.getStreets($scope.addressEdit.city.id).success(function (data, status) {
+            $scope.streets = data;
+        });
+    };
+
+    $scope.submitAddress = function () {
+        $scope.museum.street = $scope.addressEdit.street;
+        $scope.editAddressMode = false;
+    };
+
+    $scope.museumContactToString = function (contact) {
+        if (contact !== undefined) {
+            return contact.contactType.name + ': ' + contact.contact;
+        } else {
+            return '-';
+        }
+    };
+
+    $scope.addOrEditContact = function (item) {
+        $scope.addOrEditContactMode = true;
+        if (item !== undefined) {
+            $scope.contact = item;
+        } else {
+            $scope.contact = {};
+        }
+        museumService.getContactTypes().success(function (data, status) {
+            $scope.contactTypes = data;
+        });
+    };
+
+    $scope.deleteContact = function (item) {
+        if (item !== undefined) {
+            $scope.museum.contacts.forEach(function (contact, i, arr) {
+                if (item.id == contact.id) {
+                    $scope.museum.contacts.splice(i, 1);
                 }
             });
         }
-        if (result == '') {
-            return '-';
+    };
+
+
+    $scope.submitContact = function (item) {
+        if (item === undefined) {
+            $scope.addOrEditContactMode = false;
+        } else {
+            if (item.id !== undefined) {
+                $scope.museum.contacts.forEach(function (contact, i, arr) {
+                    if (item.id == contact.id) {
+                        $scope.museum.contacts[i].contact = item.contact;
+                        $scope.museum.contacts[i].contactType = item.contactType;
+                    }
+                });
+
+                $scope.addOrEditContactMode = false;
+            } else {
+                $scope.museum.contacts.push(item);
+
+                $scope.addOrEditContactMode = false;
+            }
         }
-        return result;
     };
 
     $scope.submitItem = function (itemForPut) {
-        var c = document.getElementById("image");
-        if (c != null && c.src.length > 100){
-            delete itemForPut.imageUrl;
-            itemForPut.image = c.src;
-        }
-        itemForPut.user = null;
-        var httpRequest = $http.put(serverUrl + '/museum/', itemForPut).success(function (data, status) {
-            $scope.backToMuseum();
+        museumService.submitItem(itemForPut).success(function (data, status) {
+            museumService.getAllMuseums().success(function (data, status) {
+                $scope.museums = data;
+                $scope.backToMuseum();
+            });
         });
     };
 

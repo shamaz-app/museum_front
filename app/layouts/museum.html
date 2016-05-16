@@ -1,16 +1,19 @@
 <div>
-    <table class="w3-table">
+    <table class="w3-table" style="margin-top: 6%">
         <thead>
         <th style="width: 33%"></th>
         <th style="width: 33%"></th>
         <th style="width: 33%"></th>
         </thead>
         <tr>
-            <th dir-paginate="museum in museums | itemsPerPage: 3">
-                <a ng-href="#/museumPage/{{museum.id}}" class="w3-card-2">
 
-                    <img src="img/default.jpeg" style="width:100%" ng-show="!haveImageUrl(museum)">
-                    <img ng-src="{{ museum.imageUrl }}" style="width:100%" ng-show="haveImageUrl(museum)">
+            <th dir-paginate="museum in museums | itemsPerPage: 3">
+                <div class="panel panel-default" style="margin-left: 20px;">
+                    <a ng-href="#/museumPage/{{museum.id}}" class="w3-card-2">
+
+                        <img src="img/default.jpeg" style="width:100%" ng-show="!haveImageUrl(museum)">
+                        <img ng-src="{{ museum.imageUrl }}" style="width:100%" ng-show="haveImageUrl(museum)">
+                    </a>
 
                     <div class="w3-container">
                         <span class="w3-xlarge">{{ museum.name }}</span><br/>
@@ -19,7 +22,8 @@
                             <span class="w3-large" style="display: none">{{ museum.steet.name }}</span>
                         </div>
                     </div>
-                </a>
+
+                </div>
             </th>
         </tr>
     </table>

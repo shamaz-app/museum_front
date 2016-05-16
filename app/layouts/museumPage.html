@@ -2,6 +2,8 @@
     <h1 class="w3-center">{{ museum.name }}</h1>
     <hr>
     <div class="w3-row">
+
+        <!--Image: view and edit-->
         <div class="w3-col s4" flow-init flow-drop
              flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
              ng-style="style">
@@ -26,31 +28,128 @@
                        ng-click="$flow.cancel()"/>
             </div>
         </div>
+
+
         <div class="w3-col s8 w3-center">
-            <form class="form-horizontal" role="form">
-                <div class="form-group">
-                    <h2>Адрес:</h2>
+            <!--Address: view and edit-->
+            <div class="panel panel-default" style="margin-left: 20px;" ng-switch="editAddressMode">
+
+                <h2>Адрес:</h2>
+
+                <div ng-switch-when="false">
+                    <div class="panel-body">
+                        <span style="white-space: normal">{{ museumAddressToString() }}</span>
+
+                        <button class="w3-btn w3-tiny w3-ripple w3-blue w3-hover-light" style="padding: 2px 5px"
+                                ng-click="onActionEditAddress()">редактировать
+                        </button>
+                        <br/>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <span style="white-space: normal">{{ museumAddressToString() }}</span><br/>
+
+                <div ng-switch-when="true" class="w3-row-padding" style="margin-left: 20px">
+                    <form class="w3-container" style="text-align: left">
+
+                        <label class="w3-label w3-text-blue"><b>Страна</b></label>
+                        <select class="w3-select w3-border"
+                                ng-model="addressEdit.country"
+                                ng-change="changeCountry()"
+                                ng-options="country as country.name for country in countries track by country.id"
+                                required>
+                        </select>
+
+
+                        <label class="w3-label w3-text-blue"><b>Город</b></label>
+                        <select class="w3-select w3-border"
+                                ng-model="addressEdit.city"
+                                ng-change="changeCity()"
+                                ng-options="city as city.name for city in cities track by city.id"
+                                required>
+                        </select>
+
+                        <label class="w3-label w3-text-blue"><b>Улица</b></label>
+                        <select class="w3-select w3-border"
+                                ng-model="addressEdit.street"
+                                ng-options="street as street.name for street in streets track by street.id"
+                                required>
+                        </select>
+
+                        <label class="w3-label w3-text-blue"><b>Дом</b></label>
+                        <input class="w3-input w3-border" ng-model="museum.houseNumber" type="text">
+
+                        <button class="w3-btn w3-green" style="margin-top: 10px; margin-bot: 10px" ng-click="submitAddress()">
+                            Сохранить
+                        </button>
+                        <button class="w3-btn w3-white w3-border w3-hover-red" style="margin-top: 10px; margin-bot: 10px" style="margin-left: 5px"
+                                ng-click="submitAddress()">
+                            Отмена
+                        </button>
+
+                    </form>
+
+
                 </div>
-                <div class="form-group">
-                    <h2>Контакты:</h2>
+            </div>
+
+            <!--Contacts: view and edit-->
+            <div class="panel panel-default" style="margin-left: 20px;">
+                <h2>Контакты: </h2>
+
+                <div class="panel-body" ng-switch="addOrEditContactMode">
+                    <div ng-switch-when="false">
+                        <div ng-repeat="contact in museum.contacts">
+                            <span style="white-space: normal">{{ museumContactToString(contact) }}</span>
+
+                            <button class="w3-btn w3-tiny w3-ripple w3-blue w3-hover-light" style="padding: 2px 5px"
+                                    ng-click="addOrEditContact(contact)">редактировать
+                            </button>
+
+                            <button class="w3-btn w3-tiny w3-border w3-white w3-hover-light"
+                                    style="padding: 2px 5px; margin-left: 5px" ng-click="deleteContact(contact)">удалить
+                            </button>
+                        </div>
+
+                        <button class="w3-btn-floating w3-ripple w3-btn w3-green w3-hover-text-black"
+                                style="margin-bottom: 20px; margin-top: 20px;"
+                                ng-click="addOrEditContact()">
+                            <a>+</a>
+                        </button>
+                    </div>
+
+
+                    <div ng-switch-when="true" class="w3-row-padding" style="margin-left: 20px">
+                        <div class="w3-third">
+                            <select class="w3-select w3-border"
+                                    ng-model="contact.contactType"
+                                    ng-options="contactType as contactType.name for contactType in contactTypes track by contactType.id"
+                                    required>
+                                <option value="" disabled selected>Тип контакта</option>
+                            </select>
+                        </div>
+                        <div class="w3-third">
+                            <input class="w3-input w3-border" type="text" placeholder="Контакт"
+                                   ng-model="contact.contact">
+                        </div>
+                        <div class="w3-third">
+
+                            <button class="w3-btn w3-green" ng-click="submitContact(contact)">Сохранить</button>
+                            <button class="w3-btn w3-white w3-border w3-hover-red" style="margin-left: 5px"
+                                    ng-click="submitContact()">Отмена
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <span style="white-space: normal">{{ museumContactsToString() }}</span><br/>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 
-    <div class="w3-row-padding" style="margin-top: 20px">
+    <div class="w3-row-padding" style="text-align: center; margin-top: 40px">
         <div class="w3-half">
-            <button class="w3-btn w3-green" ng-click="submitItem(museum)">Сохранить</button>
+            <button class="w3-btn w3-green" style="margin:auto" ng-click="submitItem(museum)">Сохранить</button>
         </div>
 
         <div class="w3-half">
-            <button class="w3-btn w3-white w3-border" ng-click="backToMuseum()">Отмена</button>
+            <button class="w3-btn w3-white w3-border" style="margin:auto" ng-click="backToMuseum()">Отмена</button>
         </div>
     </div>
 </div>

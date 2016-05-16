@@ -2,7 +2,9 @@
  * Created by shamaz on 09.05.2016.
  */
 
-var app = angular.module('museum', ['ngRoute', 'ngCookies', 'museum.services', 'museum.directives', 'flow', 'angularUtils.directives.dirPagination']);
+var app = angular.module('museum', ['ngRoute', 'ngCookies', 'museum.services', 'museum.directives', 'flow',
+    'angularUtils.directives.dirPagination']);
+
 var services = angular.module('museum.services', []);
 var directives = angular.module('museum.directives', []);
 

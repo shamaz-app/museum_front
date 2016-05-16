@@ -48,9 +48,8 @@ app.controller('dictionaryController', ['$scope', '$http', function ($scope, $ht
     $scope.deleteItem = function (itemForDelete, url) {
         if (confirm('Вы действительно хотите удалить ' + itemForDelete.name + '?')) {
             var httpRequest = $http.delete(serverUrl + url + itemForDelete.id, itemForDelete).success(function (data, status) {
-                $http.get(serverUrl + '/originSource').success(function (data, status) {
-                    $scope.originSources = data;
-                });
+                $scope.loadOriginSources();
+                $scope.loadThematicSections();
             });
         }
     }
