@@ -11,9 +11,19 @@ app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpPr
             .when('/', {
                 redirectTo: '/welcome'
             })
+            .when('/login', {
+                templateUrl: '../app/layouts/login.html',
+                controller: 'loginController',
+                uri: '/login/'
+            })
             .when('/welcome', {
                 templateUrl: '../app/layouts/welcome.html',
                 uri: '/welcome'
+            })
+            .when('/showpiece/:showpieceId', {
+                templateUrl: '../app/layouts/showpiecePage.html',
+                controller: 'showpiecePageController',
+                uri: '/showpiece/'
             })
             .when('/showpieces', {
                 templateUrl: '../app/layouts/showpiecesTemplate.html',
@@ -35,6 +45,11 @@ app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpPr
                 controller: 'museumPageController',
                 uri: '/museumPage'
             })
+            .when('/dictionaries', {
+                templateUrl: '../app/layouts/dictionaries.html',
+                controller: 'dictionaryController',
+                uri: '/dictionaries'
+            })
             .when('/404', {
                 templateUrl: '../app/layouts/404.html'
             })
@@ -43,4 +58,17 @@ app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpPr
             });
 
     }])
+    .run(['$rootScope', '$location', 'securityService', function ($rootScope, $location, securityService) {
+
+        $rootScope.$on("$routeChangeStart", function (event, next) {
+            if (next.requires && next.requires.login) {
+                if (!securityService.isAuthenticated()) {
+                    $location.path('/login');
+                }
+                if (next.requires.museum && !securityService.hasRole(next.requires.museum)) {
+                    $location.path('/404');
+                }
+            }
+        });
+    }]);
 

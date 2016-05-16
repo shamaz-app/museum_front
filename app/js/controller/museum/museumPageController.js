@@ -17,14 +17,12 @@ app.controller('museumPageController', ['$scope', '$http', '$routeParams', funct
         }
     };
 
-    $scope.init();
-
     $scope.haveImageUrl = function (item) {
         if (item !== undefined && item.imageUrl !== undefined && item.imageUrl !== null) {
             return true;
         }
         return false;
-    }
+    };
 
     $scope.museumAddressToString = function () {
         var result = '';
@@ -37,5 +35,37 @@ app.controller('museumPageController', ['$scope', '$http', '$routeParams', funct
             }
         }
         return result;
-    }
+    };
+
+    $scope.museumContactsToString = function () {
+        var result = '';
+        if ($scope.museum !== undefined && $scope.museum.contacts !== undefined) {
+            $scope.museum.contacts.forEach(function(contact, i, arr) {
+                result += contact.contactType.name + ' ' + contact.contact;
+                if (arr[i+1] !== undefined) {
+                    result += '; '
+                }
+            });
+        }
+        if (result == '') {
+            return '-';
+        }
+        return result;
+    };
+
+    $scope.submitItem = function (itemForPut) {
+        var c = document.getElementById("image");
+        if (c != null && c.src.length > 100){
+            delete itemForPut.imageUrl;
+            itemForPut.image = c.src;
+        }
+        itemForPut.user = null;
+        var httpRequest = $http.put(serverUrl + '/museum/', itemForPut).success(function (data, status) {
+            $scope.backToMuseum();
+        });
+    };
+
+    $scope.backToMuseum = function () {
+        window.location.href = "#/museum";
+    };
 }]);

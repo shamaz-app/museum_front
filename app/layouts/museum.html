@@ -1,11 +1,16 @@
 <div>
     <table class="w3-table">
+        <thead>
+        <th style="width: 33%"></th>
+        <th style="width: 33%"></th>
+        <th style="width: 33%"></th>
+        </thead>
         <tr>
             <th dir-paginate="museum in museums | itemsPerPage: 3">
                 <a ng-href="#/museumPage/{{museum.id}}" class="w3-card-2">
 
                     <img src="img/default.jpeg" style="width:100%" ng-show="!haveImageUrl(museum)">
-                    <img ng-src="{{ museum.imageUrl }}" style="width:100%" ng-show="!haveImageUrl(museum)">
+                    <img ng-src="{{ museum.imageUrl }}" style="width:100%" ng-show="haveImageUrl(museum)">
 
                     <div class="w3-container">
                         <span class="w3-xlarge">{{ museum.name }}</span><br/>

@@ -1,41 +1,50 @@
-<br/>
-
 <div ng-switch="addOrEdit">
 
     <!--Отображение списка экспонатов-->
     <div ng-switch-when="false">
-        <button type="button" class="w3-btn w3-dark-grey w3-hover-green" style="margin-bottom: 20px;"
-                ng-click="onActionAddOrEditItem()">
-            Добавить
-        </button>
 
-        <br/>
+        <div class="w3-row-padding">
+            <div class="w3-half">
 
-        <table class="w3-table w3-striped w3-bordered w3-border">
+                <button type="button" class="w3-btn w3-dark-grey w3-hover-green" style="margin-bottom: 20px;"
+                        ng-click="onActionAddOrEditItem()">
+                    Добавить
+                </button>
+            </div>
 
-            <tr dir-paginate="showpiece in showpieces | itemsPerPage: 4" style="height:150px">
-                <td>
-                    <img src="img/default.jpeg" ng-show="!haveImageUrl(showpiece)" class="w3-left img-rounded w3-margin-right" width="125" height="125">
-                    <img ng-src="{{ showpiece.imageUrl }}" ng-show="haveImageUrl(showpiece)" class="w3-left img-rounded w3-margin-right" width="125" height="125"
-                            style="display: block; max-width:230px; max-height:95px; width: auto; height: auto;">
-                </td>
-                <td>
-                    <span class="w3-xlarge">{{ showpiece.name }}</span><br/>
+            <div class="w3-half">
+                <dir-pagination-controls max-size="10"></dir-pagination-controls>
+            </div>
+        </div>
 
-                    <span style="white-space: normal">{{ showpieceDescriptionToString(showpiece) }}</span><br/>
-                </td>
-                <td>
-                    <button class="w3-btn w3-green" ng-click="onActionAddOrEditItem(showpiece)">редактировать</button>
-                    <br/>
-                    <button class="w3-btn w3-red" ng-click="deleteItem(showpiece)">удалить</button>
-                </td>
+        <table class="w3-table w3-light-grey w3-border">
+
+            <tr dir-paginate="showpiece in showpieces | itemsPerPage: 4 | orderBy: 'name'" style="height:150px">
+                <a href="asd">
+                    <td>
+
+                        <img src="img/default.jpeg" ng-show="!haveImageUrl(showpiece)"
+                             class="w3-left img-rounded w3-margin-right" width="125" height="125">
+                        <img ng-src="{{ showpiece.imageUrl }}" ng-show="haveImageUrl(showpiece)"
+                             class="w3-left img-rounded w3-margin-right" width="125" height="125"
+                             style="display: block; max-width:230px; max-height:95px; width: auto; height: auto;">
+
+                    </td>
+                    <td>
+                        <span class="w3-xlarge">{{ showpiece.name }}</span><br/>
+
+                        <span style="white-space: normal">{{ showpieceDescriptionToString(showpiece) }}</span><br/>
+                    </td>
+                    <td>
+                        <a type="button" class="w3-btn w3-blue" ng-href="#/showpiece/{{showpiece.id}}">побробнее</a>
+                        <button class="w3-btn w3-green" ng-click="onActionAddOrEditItem(showpiece)">редактировать
+                        </button>
+                        <br/>
+                        <button class="w3-btn w3-red" ng-click="deleteItem(showpiece)">удалить</button>
+                    </td>
+                </a>
             </tr>
         </table>
-
-        <dir-pagination-controls
-                max-size="10">
-        </dir-pagination-controls>
-
 
     </div>
 
@@ -57,11 +66,14 @@
                 </div>
 
                 <div>
-                    <input type="submit" value="Выберите картинку" class="btn" ng-hide="$flow.files.length" flow-btn
+                    <input type="submit" value="Выберите картинку" class="btn"
+                           ng-hide="haveImageUrl(item) || $flow.files.length" flow-btn
                            flow-attrs="{accept:'image/*'}"/>
-                    <input type="submit" value="Изменить" class="btn" ng-show="$flow.files.length" flow-btn
+                    <input type="submit" value="Изменить" class="btn" ng-show="haveImageUrl(item) || $flow.files.length"
+                           flow-btn
                            flow-attrs="{accept:'image/*'}"/>
-                    <input type="submit" value="Удалить" class="btn btn-danger" ng-show="$flow.files.length"
+                    <input type="submit" value="Удалить" class="btn btn-danger"
+                           ng-show="haveImageUrl(item) || $flow.files.length"
                            ng-model="item.image"
                            ng-click="$flow.cancel()"/>
                 </div>
@@ -88,7 +100,7 @@
         <div class="w3-row" style="margin-top: 20px;">
             <div class="w3-col s2"><p>Происхождение</p></div>
             <div class="w3-col s5">
-                <select class="w3-select"
+                <select class="w3-select w3-border"
                         ng-model="item.originSource"
                         ng-options="originSource as originSource.name for originSource in originSources track by originSource.id"
                         required>
@@ -101,25 +113,11 @@
         <div class="w3-row" style="margin-top: 20px;">
             <div class="w3-col s2"><p>Тематический раздел</p></div>
             <div class="w3-col s5">
-                <select class="w3-select"
+                <select class="w3-select w3-border"
                         ng-model="item.thematicSection"
                         ng-options="thematicSection as thematicSection.name for thematicSection in thematicSections track by thematicSection.id"
                         required>
                     <option value="" disabled selected>Выберите тематический раздел</option>
-                </select>
-            </div>
-        </div>
-
-
-        <!--Выставочный зал-->
-        <div class="w3-row" style="margin-top: 20px;">
-            <div class="w3-col s2"><p>Выставочный зал</p></div>
-            <div class="w3-col s5">
-                <select class="w3-select"
-                        ng-model="item.showroom"
-                        ng-options="showroom as showroom.showroomName for showroom in showrooms track by showroom.id"
-                        required>
-                    <option value="" disabled selected>Выберите выставочный зал</option>
                 </select>
             </div>
         </div>
@@ -131,7 +129,7 @@
                 <div class="w3-row-padding">
                     <div class="w3-half">
 
-                        <select class="w3-select"
+                        <select class="w3-select w3-border"
                                 ng-model="item.state.stateType"
                                 ng-options="stateType as stateType.name for stateType in stateTypes track by stateType.id"
                                 required>
@@ -170,3 +168,4 @@
     </div>
 
 </div>
+

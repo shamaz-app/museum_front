@@ -12,55 +12,88 @@
 
     <link rel="stylesheet" href="css/app.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css">
 
     <!-- ng-flow -->
     <script src="ng-flow/dist/ng-flow-standalone.min.js"></script>
-
-
     <script src="js/aui-min.js"></script>
-    <script src="js/app.js"></script>
     <script src="js/dirPagination.js"></script>
 
+    <script src="js/app.js"></script>
+    <script src="js/injector/authInjector.js"></script>
+
     <!--controllers-->
-    <script src="js/controller/showpieceController.js" charset="utf-8"></script>
-    <script src="js/controller/museumController.js" charset="utf-8"></script>
-    <script src="js/controller/museumPageController.js" charset="utf-8"></script>
+    <script src="js/controller/showpiece/showpieceController.js" charset="utf-8"></script>
+    <script src="js/controller/museum/museumController.js" charset="utf-8"></script>
+    <script src="js/controller/museum/museumPageController.js" charset="utf-8"></script>
+    <script src="js/controller/dictionaryController.js" charset="utf-8"></script>
+    <script src="js/controller/security/loginController.js"></script>
+
+    <!--toDo: Переделать фильтры!-->
+    <script src="js/controller/globalController.js"></script>
 
     <!--services-->
+    <script src="js/service/authService.js"></script>
+    <script src="js/service/securityService.js"></script>
+    <script src="js/service/globalService.js"></script>
     <!--<script src="js/service/museumService.js"></script>-->
 
+    <!--directives-->
 </head>
 <body ng-app="museum">
 
-<nav class="w3-sidenav w3-white w3-card-2" style="width:15%">
-    <br>
-    <a href="#/welcome">На главную</i></a>
-    <a href="#/museum">Музеи</a>
-    <a href="#/showpieces">Экспонаты</a>
-</nav>
 
-<div style="margin-left:15%">
-
-    <header class="w3-container w3-dark-grey">
-        <h1>
-            Шапка: всякая инфа
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Войти</a></li>
-            </ul>
-        </h1>
-
-
-    </header>
-
-    <div class="text-center" ng-controller="showpieceController" ng-view style="padding: 20px">
+<nav class="navbar navbar-inverse">
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#/welcome">Logo</a></li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#/">На главную</a></li>
+            <li><a href="#/museum">Музеи</a></li>
+            <li><a href="#/showpieces">Экспонаты</a></li>
+            <li><a href="#/dictionaries">Словари</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+        </ul>
     </div>
+</nav>
+<div class="container-fluid text-center">
+    <div class="row content" ng-controller="globalController">
+        <div class="col-sm-2 sidenav">
+        </div>
 
-    <footer class="w3-container w3-dark-gray">
-        <h5>Footer</h5>
+        <div class="col-sm-8 text-left" ng-view>
+        </div>
 
-        <p>Footer information goes here</p>
-    </footer>
+        <div class="col-sm-2 sidenav">
+            <p>
+                <select class="w3-select w3-border"
+                        ng-model="selectedCity"
+                        ng-options="city as city.name for city in cities track by city.id"
+                        ng-change="changeCity()"
+                        required>
+                    <option value="" disabled selected>Выберите город</option>
+                </select>
+            </p>
+
+            <p>
+                <select class="w3-select w3-border"
+                        ng-model="selectedMuseum"
+                        ng-options="museum as museum.name for museum in museums track by museum.id"
+                        required>
+                    <option value="" disabled selected>Выберите музей</option>
+                </select>
+            </p>
+        </div>
+    </div>
+</div>
+
+<footer class="container-fluid text-center">
+    <p>Footer Text</p>
+</footer>
 </div>
 </body>
 </html>

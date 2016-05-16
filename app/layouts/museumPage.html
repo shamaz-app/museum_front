@@ -2,23 +2,55 @@
     <h1 class="w3-center">{{ museum.name }}</h1>
     <hr>
     <div class="w3-row">
-        <div class="w3-col s3 w3-center">
+        <div class="w3-col s4" flow-init flow-drop
+             flow-drag-enter="style={border:'4px solid green'}" flow-drag-leave="style={}"
+             ng-style="style">
 
-            <img src="img/default.jpeg" ng-show="!haveImageUrl(museum)"
-                 class="w3-round" style="height:200px;width:200px" alt="Museum">
-            <img ng-src="{{ museum.imageUrl }}" ng-show="haveImageUrl(museum)"
-                 class="w3-round" style="height:200px;width:200px" alt="Museum">
+            <div class="thumbnail" ng-show="$flow.files.length">
+                <img id="image" flow-img="$flow.files[0]"/>
+            </div>
+            <div class="thumbnail" ng-show="haveImageUrl(museum) && !$flow.files.length">
+                <img ng-src="{{ museum.imageUrl }}"/>
+            </div>
+
+            <div>
+                <input type="submit" value="Выберите картинку" class="btn"
+                       ng-hide="haveImageUrl(museum) || $flow.files.length" flow-btn
+                       flow-attrs="{accept:'image/*'}"/>
+                <input type="submit" value="Изменить" class="btn" ng-show="haveImageUrl(museum) || $flow.files.length"
+                       flow-btn
+                       flow-attrs="{accept:'image/*'}"/>
+                <input type="submit" value="Удалить" class="btn btn-danger"
+                       ng-show="haveImageUrl(museum) || $flow.files.length"
+                       ng-model="museum.image"
+                       ng-click="$flow.cancel()"/>
+            </div>
         </div>
-        <div class="w3-col s9 w3-center">
+        <div class="w3-col s8 w3-center">
             <form class="form-horizontal" role="form">
                 <div class="form-group">
-
                     <h2>Адрес:</h2>
                 </div>
                 <div class="form-group">
-                    <span style="white-space: normal">{{ museumAddressToString(museum) }}</span><br/>
+                    <span style="white-space: normal">{{ museumAddressToString() }}</span><br/>
+                </div>
+                <div class="form-group">
+                    <h2>Контакты:</h2>
+                </div>
+                <div class="form-group">
+                    <span style="white-space: normal">{{ museumContactsToString() }}</span><br/>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <div class="w3-row-padding" style="margin-top: 20px">
+        <div class="w3-half">
+            <button class="w3-btn w3-green" ng-click="submitItem(museum)">Сохранить</button>
+        </div>
+
+        <div class="w3-half">
+            <button class="w3-btn w3-white w3-border" ng-click="backToMuseum()">Отмена</button>
         </div>
     </div>
 </div>

@@ -1,0 +1,13 @@
+<div class="w3-container w3-light-grey">
+    <h2>Вход</h2>
+</div>
+
+<form class="w3-container">
+    <label class="w3-label w3-text-grey"><b>Логин</b></label>
+    <input class="w3-input w3-border w3-light-grey" type="text" ng-model="credentials.login">
+
+    <label class="w3-label w3-text-grey"><b>Пароль</b></label>
+    <input class="w3-input w3-border w3-light-grey" type="text" ng-model="credentials.password">
+
+    <button class="w3-btn w3-blue-grey" ng-click="authorise(credentials.login, credentials.password)">Вход</button>
+</form>

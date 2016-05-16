@@ -6,7 +6,7 @@
 
 var itemTemplate = {};
 
-app.controller('showpieceController', ['$scope', '$http', '$controller', function ($scope, $http, $controller) {
+app.controller('showpieceController', ['$scope', '$http', function ($scope, $http) {
 
     $http.get('http://localhost:8182/showpieces').success(function (data) {
         $scope.showpieces = data;
