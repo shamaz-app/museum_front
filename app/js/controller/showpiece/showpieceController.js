@@ -50,14 +50,18 @@ app.controller('showpieceController', ['$scope', '$http', function ($scope, $htt
         $scope.addOrEdit = true;
         if (item !== undefined) {
             $scope.item = item;
+            $scope.loadShowrooms(item.museum.id);
         } else {
             $scope.item = itemTemplate;
         }
     };
 
-    var httpRequest = $http.get(serverUrl + '/showroom/').success(function (data, status) {
-        $scope.showrooms = data;
-    });
+    $scope.loadShowrooms = function (museumId) {
+        var httpRequest = $http.get(serverUrl + '/showroom/museumId/' + museumId).success(function (data, status) {
+            $scope.showrooms = data;
+        });
+    };
+
     var httpRequest = $http.get(serverUrl + '/stateType/').success(function (data, status) {
         $scope.stateTypes = data;
     });

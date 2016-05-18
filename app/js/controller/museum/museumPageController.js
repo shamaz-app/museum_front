@@ -10,14 +10,22 @@ app.controller('museumPageController', ['$scope', '$http', '$routeParams', 'muse
 
     $scope.addOrEditContactMode = false;
     $scope.editAddressMode = false;
+    $scope.editShowroomMode = false;
 
     $scope.init = function () {
         $scope.museumId = $routeParams.museumId;
+        $scope.loadShowrooms();
         if ($scope.museumId != null) {
             $http.get(serverUrl + '/museum/' + $scope.museumId).success(function (data, status) {
                 $scope.museum = data;
             });
         }
+    };
+
+    $scope.loadShowrooms = function () {
+        $http.get(serverUrl + '/showroom').success(function (data, status) {
+            $scope.showrooms = data;
+        });
     };
 
     $scope.haveImageUrl = function (item) {
@@ -57,6 +65,32 @@ app.controller('museumPageController', ['$scope', '$http', '$routeParams', 'muse
             $scope.addressEdit.street = $scope.museum.street;
             $scope.editAddressMode = true;
         }
+    };
+
+    $scope.onActionEditShowroom = function (item) {
+        if (item !== undefined) {
+            $scope.showroom = item;
+        } else {
+            $scope.showroom = {};
+        }
+        $scope.editShowroomMode = true;
+    };
+
+    $scope.deleteShowroom = function (itemForDelete) {
+        if (confirm('Вы действительно хотите удалить ' + itemForDelete.showroomName + '?')) {
+            var httpRequest = $http.delete(serverUrl + '/showroom/' + itemForDelete.id, itemForDelete).success(function (data, status) {
+                $scope.loadShowrooms();
+            });
+        }
+    };
+
+    $scope.backToShowrooms = function (itemForPut) {
+        if (itemForPut !== undefined) {
+            itemForPut.museum = $scope.museum;
+            museumService.submitShowroom(itemForPut);
+            $scope.loadShowrooms();
+        }
+        $scope.editShowroomMode = false;
     };
 
     $scope.changeCountry = function () {

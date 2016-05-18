@@ -37,6 +37,10 @@ app.config(['$routeProvider', '$httpProvider', function ($routeProvider, $httpPr
                 controller: 'museumController',
                 uri: '/museums/'
             })
+            .when('/showroom/', {
+                templateUrl: '../app/layouts/showrooms.html',
+                controller: 'showroomController'
+            })
             .when('/museumPage/', {
                 templateUrl: '../app/layouts/museumPage.html',
                 controller: 'museumPageController',

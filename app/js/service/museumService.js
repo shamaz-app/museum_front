@@ -56,6 +56,12 @@ services.factory('museumService', ['$http', function ($http) {
                         return data;
                     });
                 }
+            },
+
+            submitShowroom: function (itemForPut) {
+                return $http.put(serverUrl + '/showroom/', itemForPut).success(function (data, status) {
+                    return data;
+                });
             }
         };
 
